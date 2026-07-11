@@ -32,6 +32,14 @@ For developing/testing, you can load it as a temporary add-on:
 web-ext run --target=firefox-android --android-device <android-device-serial-here>
 ```
 
+### Publish
+
+To package it up for signing/upload, build a zip into `web-ext-artifacts/`:
+
+```sh
+web-ext build --overwrite-dest
+```
+
 ## Usage
 
 1. Open the site and click the Amnestic icon.
