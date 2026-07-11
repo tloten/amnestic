@@ -48,3 +48,7 @@ You can also let it reset on its own. In the extension settings you can let it r
 - **On session start:** first visit after Firefox restarts
 
 These run quietly in the background and don't reload the page.
+
+## License
+
+[MIT](LICENSE)

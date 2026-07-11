@@ -5,8 +5,11 @@
   "description": "Preserve a site's 'known good' state and restore back to it - selective memory to reset metered paywalls.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "amnestic@tom.local",
-      "strict_min_version": "128.0"
+      "id": "amnestic@tloten.dev",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "permissions": [
@@ -17,11 +20,16 @@
   "optional_permissions": [
     "<all_urls>"
   ],
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
   "background": {
     "scripts": ["background.js"]
   },
   "browser_action": {
     "default_popup": "popup.html",
-    "default_title": "Amnestic"
+    "default_title": "Amnestic",
+    "default_icon": "icon.svg"
   }
 }
