@@ -60,6 +60,13 @@ function matchDomain(host, sites) {
 
 const originPattern = (domain) => `*://*.${domain}/*`;
 
+// Reverse of originPattern: "*://*.example.com/*" -> "example.com". Returns null
+// for anything that isn't a site pattern (e.g. "<all_urls>").
+function domainFromOrigin(origin) {
+  const m = /^(?:\*|https?):\/\/(?:\*\.)?([^/]+)\/\*$/.exec(origin);
+  return m ? m[1] : null;
+}
+
 // ---- cookies ----------------------------------------------------------------
 
 function cookieUrl(c) {
@@ -277,6 +284,43 @@ async function maybeAutoReset(tabId, url) {
     await doRestore(domain, tabId, { reload: false });
   }
 }
+
+// Keep the configured-sites list in sync with actual granted host permissions.
+// This is the source of truth for enabling a site: it fires even when the popup
+// closes mid-grant (clicking "Allow" moves focus and tears the popup down), so
+// the site is recorded regardless of whether the popup script survived.
+async function syncAddedOrigins(origins) {
+  const domains = (origins || []).map(domainFromOrigin).filter(Boolean);
+  if (!domains.length) return;
+  const settings = await getSettings();
+  let changed = false;
+  for (const d of domains) {
+    if (!settings.sites.includes(d)) {
+      settings.sites.push(d);
+      changed = true;
+    }
+  }
+  if (changed) await browser.storage.local.set({ settings });
+}
+
+async function syncRemovedOrigins(origins) {
+  const domains = (origins || []).map(domainFromOrigin).filter(Boolean);
+  if (!domains.length) return;
+  const settings = await getSettings();
+  const kept = settings.sites.filter((d) => !domains.includes(d));
+  if (kept.length !== settings.sites.length) {
+    settings.sites = kept;
+    await browser.storage.local.set({ settings });
+    for (const d of domains) await deleteSite(d);
+  }
+}
+
+browser.permissions.onAdded.addListener((perms) => {
+  syncAddedOrigins(perms.origins).catch((e) => console.warn("onAdded:", e));
+});
+browser.permissions.onRemoved.addListener((perms) => {
+  syncRemovedOrigins(perms.origins).catch((e) => console.warn("onRemoved:", e));
+});
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status !== "complete" || !tab || !tab.url) return;

@@ -8,7 +8,9 @@
         font-family: sans-serif;
         margin: 0;
         padding: 16px;
-        min-width: 280px;
+        width: 300px;
+        max-width: 100%;
+        box-sizing: border-box;
         font-size: 16px;
       }
       h1 {
@@ -61,6 +63,12 @@
         color: #555;
         margin: 2px 0 8px;
         word-break: break-all;
+      }
+      .hint {
+        font-size: 12px;
+        color: #777;
+        margin: 6px 0 0;
+        line-height: 1.4;
       }
       #domainInput {
         width: 100%;
@@ -137,6 +145,7 @@
     <div id="enableBlock" class="hidden">
       <input type="text" id="domainInput" placeholder="domain, e.g. example.com" />
       <button id="enable">Enable Amnestic for this site</button>
+      <p class="hint">This menu will close and will show a permission prompt. Allow it, then reopen these settings to save a snapshot.</p>
     </div>
 
     <!-- Shown when the active tab's site IS configured -->

@@ -145,27 +145,18 @@ async function load() {
 
 // ---- actions ----------------------------------------------------------------
 
-els.enable.addEventListener("click", async () => {
-  // Read the domain synchronously first, then call permissions.request() as the
-  // first await so the user-gesture context is preserved for the prompt.
+els.enable.addEventListener("click", () => {
   const domain = els.domainInput.value.trim().replace(/^\.+|\.+$/g, "");
   if (!domain || !domain.includes(".")) {
     setStatus("Enter a valid domain, e.g. example.com", true);
     return;
   }
-  let granted;
-  try {
-    granted = await browser.permissions.request({ origins: [`*://*.${domain}/*`] });
-  } catch (e) {
-    setStatus(e.message || String(e), true);
-    return;
-  }
-  if (!granted) {
-    setStatus("Permission denied for " + domain + ".", true);
-    return;
-  }
-  await browser.runtime.sendMessage({ cmd: "addSite", domain });
-  await refresh();
+  // Fire the request within the user gesture, then close the popup immediately
+  // so the permission prompt (anchored to the toolbar button) isn't hidden
+  // behind it. The request stays alive after the popup closes, and the
+  // background's permissions.onAdded listener records the site once allowed.
+  browser.permissions.request({ origins: [`*://*.${domain}/*`] });
+  window.close();
 });
 
 els.save.addEventListener("click", async () => {
