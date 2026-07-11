@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 16px;
+        min-width: 280px;
+        font-size: 16px;
+      }
+      h1 {
+        font-size: 17px;
+        margin: 0 0 4px;
+      }
+      h2 {
+        font-size: 14px;
+        margin: 0 0 8px;
+        color: #333;
+      }
+      .hidden {
+        display: none;
+      }
+      button {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        margin: 8px 0;
+        font-size: 16px;
+        border: 1px solid #888;
+        border-radius: 8px;
+        background: #f5f5f5;
+      }
+      button:active {
+        background: #e0e0e0;
+      }
+      #save {
+        background: #0b7a3b;
+        color: #fff;
+        border-color: #0b7a3b;
+      }
+      #restore {
+        background: #1e5aa8;
+        color: #fff;
+        border-color: #1e5aa8;
+      }
+      #enable {
+        background: #0b7a3b;
+        color: #fff;
+        border-color: #0b7a3b;
+      }
+      .section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid #ddd;
+      }
+      .site-current {
+        font-size: 13px;
+        color: #555;
+        margin: 2px 0 8px;
+        word-break: break-all;
+      }
+      #domainInput {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+        margin: 4px 0;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        gap: 10px;
+      }
+      .row label {
+        flex: 1;
+      }
+      .row input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+      }
+      .row.days {
+        justify-content: space-between;
+        margin-left: 30px;
+        font-size: 15px;
+        color: #555;
+      }
+      .row.days input[type="number"] {
+        width: 64px;
+        padding: 8px;
+        font-size: 16px;
+      }
+      #sitesList {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+      }
+      #sitesList li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        gap: 8px;
+      }
+      #sitesList .remove {
+        width: auto;
+        margin: 0;
+        padding: 6px 10px;
+        font-size: 13px;
+        background: #fff;
+        border-color: #c00;
+        color: #c00;
+      }
+      #sitesList .empty {
+        color: #888;
+      }
+      #status {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #444;
+        white-space: pre-line;
+      }
+      .err {
+        color: #b00020;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Amnestic</h1>
+    <div id="siteCurrent" class="site-current"></div>
+
+    <!-- Shown when the active tab's site is not yet configured -->
+    <div id="enableBlock" class="hidden">
+      <input type="text" id="domainInput" placeholder="domain, e.g. example.com" />
+      <button id="enable">Enable Amnestic for this site</button>
+    </div>
+
+    <!-- Shown when the active tab's site IS configured -->
+    <div id="actions" class="hidden">
+      <button id="save">Save snapshot</button>
+      <button id="restore">Restore snapshot</button>
+    </div>
+
+    <div class="section">
+      <h2>Auto-reset triggers</h2>
+      <div class="row">
+        <label for="onInterval">Interval</label>
+        <input type="checkbox" id="onInterval" />
+      </div>
+      <div class="row days">
+        <label for="autoResetDays">Reset after (days)</label>
+        <input type="number" id="autoResetDays" min="0.0001" step="1" />
+      </div>
+      <div class="row">
+        <label for="onPageLoad">On page load</label>
+        <input type="checkbox" id="onPageLoad" />
+      </div>
+      <div class="row">
+        <label for="onSessionStart">On session start</label>
+        <input type="checkbox" id="onSessionStart" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Enabled sites</h2>
+      <ul id="sitesList"></ul>
+    </div>
+
+    <div id="status"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
