@@ -2,6 +2,10 @@
 
 A Firefox extension that periodically resets a website's cookies & site-data back to a saved starting point, so metered paywalls never hit their limit. Runs on Firefox for desktop and Android.
 
+## Install
+
+[Get it on Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/amnestic/)
+
 ## What it's for
 
 Some sites give you a handful of free views, and then prompt you to sign-up/pay/etc. If you can clear site-data and the site is usable again, then this addon is for you.
